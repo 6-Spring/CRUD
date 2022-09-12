@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaozheng.crud.mapper.StudentMapper">
+    <insert id="insert">
+        insert into stus (id, name, age, sex)
+        values (#{id},#{name},#{age},#{sex})
+    </insert>
+
+    <update id="update">
+        update stus
+        set name = #{name},age = #{age}, sex = #{sex}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from stus
+        where id = #{id}
+    </delete>
+
+    <!--查找所有学生信息-->
+    <select id="getAll" resultType="com.xiaozheng.crud.entity.Student">
+        select id,name,age,sex
+        from stus
+    </select>
+    <select id="findById" resultType="com.xiaozheng.crud.entity.Student">
+        select id,name,age,sex
+        from stus
+        where id = #{id}
+    </select>
+</mapper>

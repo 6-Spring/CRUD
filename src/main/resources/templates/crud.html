@@ -24,7 +24,7 @@
                 <th>性别</th>
                 <!-- 跨两行 -->
                 <th colspan="2">
-                <button type="button" class="btn btn-primary">增加</button>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal" >增加</button>
                 </th>
             </tr>
 
@@ -32,26 +32,103 @@
                 <td>{{s.id}}</td>
                 <td>{{s.name}}</td>
                 <td>{{s.age}}</td>
-                <td>{{s.gender}}</td>
+                <td>{{s.sex}}</td>
                 <td>
-                    <button type="button" class="btn btn-danger" @click="updateById(s.id)">编辑</button>
-                    <button type="button" class="btn btn-success" @click="deleteById(s.id)">删除</button>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#Modal" @click="findById(s.id)">
+                        编辑
+                    </button>
+                    <button type="button" class="btn btn-danger" @click="deleteById(s.id)">删除</button>
                     
                 </td>
                 
             </tr>
 
         </table>
+
+
+
+
+        <!-- 编辑Modal 框-->
+        <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">编辑学生表单</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">姓名</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="请输入姓名" v-model="stu.name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput2" class="form-label">年龄</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="请输入年龄" v-model="stu.age">
+                        </div>
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput2" class="form-label">性别</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput3" placeholder="请输入性别" v-model="stu.sex">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="updateById()">保存并提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 添加Modal 框-->
+        <!-- Modal -->
+        <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel01">增加</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="floatingInput1" placeholder="姓名" v-model="name">
+                            <label for="floatingInput1" >姓名</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="floatingInput2" placeholder="年龄" v-model="age">
+                            <label for="floatingInput2">年龄</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="floatingInput3" placeholder="性别" v-model="sex">
+                            <label for="floatingInput3">性别</label>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" @click="addStu" data-bs-dismiss="modal">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    
+
+
 
     <!-- 创建vue实例 -->
     <script type="text/javascript">
-        new Vue({
+        var vm = new Vue({
             el:'#app',
             data:{
-                stus:[]
+                stus:[],
+                stu:"",
+                name:"",
+                age:"",
+                sex:""
             },
             created(){
                 //加载时，查询所有
@@ -60,21 +137,44 @@
             methods: {
                 //查询所有
                 selectAll(){
-                    axios.get("http://localhost:8888/stu/getAll").then((res)=>{
+                    axios.get("http://localhost:8848/student/getAll").then((res)=>{
                         this.stus = res.data;
                     })
                 },
                 //根据ID删除
                 deleteById(id) {
                    console.log("nihao:"+id)
-                    axios.delete("http://localhost:8888/stu/delete/"+id).then((res)=>{
+                    axios.delete("http://localhost:8848/student/delete/"+id).then((res)=>{
                         this.selectAll();
                     })
 
                 },
-                updateById(id){
+                // 根据ID查找
+                findById(id){
 
-                }
+                    axios.get("http://localhost:8848/student/findById/"+id).then((res)=>{
+                        this.stu = res.data;
+                    })
+                },
+                updateById(){
+                    axios({
+                        url:'http://localhost:8848/student/updateById',
+                        method: 'post',
+                        data:  vm.stu
+
+                    }).then((res)=>{
+                        this.selectAll();
+                    })
+                },
+                addStu(){
+                    axios({
+                        url:'http://localhost:8848/student/addStu',
+                        method: 'post',
+                        data:  vm.$data
+                    }).then((res)=>{
+                        this.selectAll();
+                    })
+                },
             }
         })
     </script>

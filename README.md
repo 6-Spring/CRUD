@@ -1,5 +1,5 @@
 # 工程简介
-> 简单的增删改查，springboot一体项目
+> 简单的增删改查，springboot一体项目(纯手写)
 # 静态资源
 - bootstrap
 - js
