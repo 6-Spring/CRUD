@@ -137,14 +137,14 @@
             methods: {
                 //查询所有
                 selectAll(){
-                    axios.get("http://localhost:8848/student/getAll").then((res)=>{
+                    axios.get("http://localhost:8989/student/getAll").then((res)=>{
                         this.stus = res.data;
                     })
                 },
                 //根据ID删除
                 deleteById(id) {
                    console.log("nihao:"+id)
-                    axios.delete("http://localhost:8848/student/delete/"+id).then((res)=>{
+                    axios.delete("http://localhost:8989/student/delete/"+id).then((res)=>{
                         this.selectAll();
                     })
 
@@ -152,13 +152,13 @@
                 // 根据ID查找
                 findById(id){
 
-                    axios.get("http://localhost:8848/student/findById/"+id).then((res)=>{
+                    axios.get("http://localhost:8989/student/findById/"+id).then((res)=>{
                         this.stu = res.data;
                     })
                 },
                 updateById(){
                     axios({
-                        url:'http://localhost:8848/student/updateById',
+                        url:'http://localhost:8989/student/updateById',
                         method: 'post',
                         data:  vm.stu
 
@@ -168,7 +168,7 @@
                 },
                 addStu(){
                     axios({
-                        url:'http://localhost:8848/student/addStu',
+                        url:'http://localhost:8989/student/addStu',
                         method: 'post',
                         data:  vm.$data
                     }).then((res)=>{
